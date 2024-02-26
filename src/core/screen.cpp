@@ -23,6 +23,9 @@ Screen::Screen() {
     rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight);
     refresh();
 
+    currentWindow = 1;
+    leftWindow->isFocused = 1;
+
     leftWindow->writeBox();
     leftWindow->printName();
     leftWindow->printFiles();
@@ -30,6 +33,7 @@ Screen::Screen() {
 
     rightWindow->writeBox();
     rightWindow->printName();
+    rightWindow->printFiles();
     rightWindow->refreshWindow();
 }
 
@@ -37,7 +41,7 @@ Screen::~Screen() {
     endwin();
 }
 
-void Screen::listener() const {
+void Screen::listener() {
     move(mainWindowHeight, 0);
     int t = getch();
 
@@ -48,16 +52,44 @@ void Screen::listener() const {
         exit(0);
     }
 
+    if (t == 9) {
+        currentWindow = !currentWindow;
+        leftWindow->isFocused = !leftWindow->isFocused;
+        rightWindow->isFocused = !rightWindow->isFocused;
+
+        leftWindow->printName();
+        leftWindow->printFiles();
+
+        rightWindow->printName();
+        rightWindow->printFiles();
+    }
+
     if (t == 115 || t == 258) {
-        leftWindow->moveCursor(1);
+        if(currentWindow) {
+            leftWindow->moveCursor(1);
+        } else {
+            rightWindow->moveCursor(1);
+        }
     } 
     if (t == 119 || t == 259) {
-        leftWindow->moveCursor(-1);
+        if(currentWindow) {
+            leftWindow->moveCursor(-1);
+        } else {
+            rightWindow->moveCursor(-1);
+        }
     }
     if(t == 100 || t == 261) {
-        leftWindow->changeDir();
+        if(currentWindow) {
+            leftWindow->changeDir();
+        } else {
+            rightWindow->changeDir();
+        }
     }
     if (t == 97 || t == 260) {
-        leftWindow->leaveDir();
+        if(currentWindow) {
+            leftWindow->leaveDir();
+        } else {
+            rightWindow->leaveDir();
+        }
     }
 }

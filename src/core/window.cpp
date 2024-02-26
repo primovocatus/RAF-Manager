@@ -47,7 +47,12 @@ void Window::writeBox() const {
 void Window::printName() const {
     writeBox();
 
+    if(isFocused) {
+        wattron(window, A_REVERSE);
+    }
+
     mvwprintw(window, 0, 1, path.data());
+    wattroff(window, A_REVERSE);
 
     refreshWindow();
 }
@@ -57,7 +62,7 @@ void Window::printFiles() {
     int currentY = 1;
 
     for (int i = topFile; i < bottomFile; ++i) {
-        bool isPointer = (i == cursorPosition);
+        bool isPointer = (i == cursorPosition && isFocused);
 
         if(isPointer) {
             wattron(window, A_REVERSE);
