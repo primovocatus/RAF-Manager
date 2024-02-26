@@ -1,12 +1,15 @@
 #include <ncurses.h>
+#include <iostream>
 
 #include "lib/screen.h"
 
 Screen::Screen() {
     initscr();
 
-    echo();
+    noecho();
     curs_set(0);
+
+    keypad(stdscr, TRUE);
 
     cbreak();
 
@@ -20,6 +23,9 @@ Screen::Screen() {
     rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight);
     refresh();
 
+    currentWindow = 1;
+    leftWindow->isFocused = 1;
+
     leftWindow->writeBox();
     leftWindow->printName();
     leftWindow->printFiles();
@@ -27,23 +33,63 @@ Screen::Screen() {
 
     rightWindow->writeBox();
     rightWindow->printName();
+    rightWindow->printFiles();
     rightWindow->refreshWindow();
 }
 
-void Screen::listener() const {
-    move(mainWindowHeight, 0);
-    char t = getch();
+Screen::~Screen() {
+    endwin();
+}
 
-    if ((int)t == 115) {
-        leftWindow->moveCursor(1);
+void Screen::listener() {
+    move(mainWindowHeight, 0);
+    int t = getch();
+
+    // std::cout<< t << std::endl;
+
+    if (t == 113) {
+        Screen::~Screen();
+        exit(0);
+    }
+
+    if (t == 9) {
+        currentWindow = !currentWindow;
+        leftWindow->isFocused = !leftWindow->isFocused;
+        rightWindow->isFocused = !rightWindow->isFocused;
+
+        leftWindow->printName();
+        leftWindow->printFiles();
+
+        rightWindow->printName();
+        rightWindow->printFiles();
+    }
+
+    if (t == 115 || t == 258) {
+        if(currentWindow) {
+            leftWindow->moveCursor(1);
+        } else {
+            rightWindow->moveCursor(1);
+        }
     } 
-    if ((int)t == 119) {
-        leftWindow->moveCursor(-1);
+    if (t == 119 || t == 259) {
+        if(currentWindow) {
+            leftWindow->moveCursor(-1);
+        } else {
+            rightWindow->moveCursor(-1);
+        }
     }
-    if((int)t == 100) {
-        leftWindow->changeDir();
+    if(t == 100 || t == 261) {
+        if(currentWindow) {
+            leftWindow->changeDir();
+        } else {
+            rightWindow->changeDir();
+        }
     }
-    if ((int)t == 97) {
-        leftWindow->leaveDir();
+    if (t == 97 || t == 260) {
+        if(currentWindow) {
+            leftWindow->leaveDir();
+        } else {
+            rightWindow->leaveDir();
+        }
     }
 }

@@ -10,11 +10,14 @@ class Screen {
         int leftWindowWidth;
         int rightWindowWidth;
 
+        bool currentWindow;
+
         Window* leftWindow;
         Window* rightWindow;
 
     public:
         Screen();
+        ~Screen();
 
-        void listener() const;
+        void listener();
 };

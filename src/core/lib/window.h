@@ -28,7 +28,10 @@ class Window {
 
     public:
         Window();
-        Window(const int& y, const int& x, const int& width, const int& height);
+        Window(const int& y, const int& x, const int& width, 
+                const int& height);
+
+        bool isFocused = 0;
 
         void clearWindow() const;
         void refreshWindow() const;
