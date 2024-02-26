@@ -121,21 +121,26 @@ void Window::moveCursor(const int direction) {
 
 void Window::changeDir() {
     if(dir[cursorPosition].isDirectory) {
-        stack.push_back(path);
-        path = dir[cursorPosition].path;
+        try {
+            stack.push_back(path);
+            path = dir[cursorPosition].path;
 
-        getFiles(path, dir);
-        filesCount = (int)dir.size();
-        topFile = 0, bottomFile = std::min(filesCount, height - 2);
+            getFiles(path, dir);
+            filesCount = (int)dir.size();
+            topFile = 0, bottomFile = std::min(filesCount, height - 2);
 
-        cursorPosition = 0;
+            cursorPosition = 0;
 
-        clearWindow();
+            clearWindow();
 
-        writeBox();
-        printName();
-        printFiles();
-
+            writeBox();
+            printName();
+            printFiles();
+        } catch (std::filesystem::filesystem_error& e) {
+            path = stack.back();
+            stack.pop_back();
+            return;
+        }
     }
 }
 
