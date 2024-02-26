@@ -15,6 +15,7 @@ class Screen {
 
     public:
         Screen();
+        ~Screen();
 
         void listener() const;
 };

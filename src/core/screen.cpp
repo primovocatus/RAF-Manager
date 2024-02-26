@@ -1,12 +1,15 @@
 #include <ncurses.h>
+#include <iostream>
 
 #include "lib/screen.h"
 
 Screen::Screen() {
     initscr();
 
-    echo();
+    noecho();
     curs_set(0);
+
+    keypad(stdscr, TRUE);
 
     cbreak();
 
@@ -30,20 +33,31 @@ Screen::Screen() {
     rightWindow->refreshWindow();
 }
 
+Screen::~Screen() {
+    endwin();
+}
+
 void Screen::listener() const {
     move(mainWindowHeight, 0);
-    char t = getch();
+    int t = getch();
 
-    if ((int)t == 115) {
+    // std::cout<< t << std::endl;
+
+    if (t == 113) {
+        Screen::~Screen();
+        exit(0);
+    }
+
+    if (t == 115 || t == 258) {
         leftWindow->moveCursor(1);
     } 
-    if ((int)t == 119) {
+    if (t == 119 || t == 259) {
         leftWindow->moveCursor(-1);
     }
-    if((int)t == 100) {
+    if(t == 100 || t == 261) {
         leftWindow->changeDir();
     }
-    if ((int)t == 97) {
+    if (t == 97 || t == 260) {
         leftWindow->leaveDir();
     }
 }
