@@ -1,0 +1,29 @@
+
+name: build project and upload as artifact
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: update apt repos
+      run: sudo apt update -y
+    - name: install cmake
+      run: sudo apt install cmake make g++ -y
+    - name: Generate build files
+      run: cmake .
+    - name: Build files
+      run: cmake --build .
+    - name: archive resulting executable
+      uses: actions/upload-artifact@v4
+      with:
+          name: main_executable
+          path: main
