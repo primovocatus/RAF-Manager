@@ -4,8 +4,6 @@
 #include <vector>
 #include <algorithm>
 
-#include <iostream>
-
 #include "directory.h"
 
 class Window {
