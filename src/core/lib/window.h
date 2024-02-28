@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <iostream>
+
 #include "directory.h"
 
 class Window {
@@ -44,4 +46,6 @@ class Window {
 
         void changeDir();
         void leaveDir();
+
+        void findFile(const std::string& name);
 };

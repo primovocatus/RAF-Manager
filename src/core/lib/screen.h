@@ -1,6 +1,7 @@
 #include <ncurses.h>
 
 #include "window.h"
+#include "find.h"
 
 class Screen {
     private:
@@ -14,6 +15,8 @@ class Screen {
 
         Window* leftWindow;
         Window* rightWindow;
+
+        Find* find;
 
     public:
         Screen();
