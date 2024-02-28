@@ -167,3 +167,19 @@ void Window::leaveDir() {
         printFiles();
     }
 }
+
+void Window::findFile(const std::string& name) {
+    for (int i = 0; i < (int)dir.size(); ++i) {
+        if(dir[i].name == name) {
+            cursorPosition = i;
+            topFile = i;
+            bottomFile = filesCount;
+
+            if(filesCount < topFile + height - 2) {
+                topFile = std::max(0, filesCount - height + 2);
+            } else {
+                bottomFile = topFile + height - 2;
+            }
+        }
+    }
+}

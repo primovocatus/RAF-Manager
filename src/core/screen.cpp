@@ -21,6 +21,9 @@ Screen::Screen() {
 
     leftWindow = new Window(0, 0, leftWindowWidth, mainWindowHeight);
     rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight);
+    
+    find = new Find(mainWindowWidth, mainWindowHeight);
+    
     refresh();
 
     currentWindow = 1;
@@ -45,13 +48,39 @@ void Screen::listener() {
     move(mainWindowHeight, 0);
     int t = getch();
 
-    // std::cout<< t << std::endl;
+    std::string key = keyname(t);
+    // std::cout<< keyname(t) << std::endl;
+    // exit(-1);
 
-    if (t == 113) {
+    if (key == "q") {
         Screen::~Screen();
         exit(0);
     }
+    
+    if(key == "^F") {
+        find->print();
+        
+        std::string query = find->getName();
+        
+        std::cout<<query;
 
+        if(currentWindow) {
+            leftWindow->findFile(query);
+        } else {
+            rightWindow->findFile(query);
+        }
+
+        leftWindow->writeBox();
+        leftWindow->printName();
+        leftWindow->printFiles();
+        leftWindow->refreshWindow();
+
+        rightWindow->writeBox();
+        rightWindow->printName();
+        rightWindow->printFiles();
+        rightWindow->refreshWindow();
+    }
+    
     if (t == 9) {
         currentWindow = !currentWindow;
         leftWindow->isFocused = !leftWindow->isFocused;
@@ -64,28 +93,28 @@ void Screen::listener() {
         rightWindow->printFiles();
     }
 
-    if (t == 115 || t == 258) {
+    if (key == "s" || key == "KEY_DOWN") {
         if(currentWindow) {
             leftWindow->moveCursor(1);
         } else {
             rightWindow->moveCursor(1);
         }
     } 
-    if (t == 119 || t == 259) {
+    if (key == "w" || key == "KEY_UP") {
         if(currentWindow) {
             leftWindow->moveCursor(-1);
         } else {
             rightWindow->moveCursor(-1);
         }
     }
-    if(t == 100 || t == 261) {
+    if(key == "d" || key == "KEY_RIGHT") {
         if(currentWindow) {
             leftWindow->changeDir();
         } else {
             rightWindow->changeDir();
         }
     }
-    if (t == 97 || t == 260) {
+    if (key == "a" || key == "KEY_LEFT") {
         if(currentWindow) {
             leftWindow->leaveDir();
         } else {
