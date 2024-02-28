@@ -1,5 +1,12 @@
 #include "lib/directory.h"
 
+bool sortName(const file& a, const file& b) {
+    if(!(a.isDirectory ^ b.isDirectory)) {
+        return a.name < b.name;
+    }
+    return a.isDirectory;
+}
+
 void getFiles(const std::string& path, std::vector<file>& dir) {
     dir.clear();
 
@@ -20,5 +27,5 @@ void getFiles(const std::string& path, std::vector<file>& dir) {
         dir.push_back(currentFile);
     }
 
-    sort(dir.begin(), dir.end());
+    sort(dir.begin(), dir.end(), sortName);
 }

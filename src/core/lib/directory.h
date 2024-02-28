@@ -34,4 +34,6 @@ struct file {
     }
 };
 
+bool sortName(const file& a, const file& b);
+
 void getFiles(const std::string& path, std::vector<file>& dir);
