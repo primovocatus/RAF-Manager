@@ -1,6 +1,6 @@
-#include "lib/find.h"
+#include "lib/rename.h"
 
-Find::Find(const int& windowWidth, const int& windowHeight) {
+Rename::Rename(const int& windowWidth, const int& windowHeight) {
     int leftShift = (windowWidth + 2) / 3;
     int topShift = (windowHeight - 5) / 2;
     
@@ -13,7 +13,7 @@ Find::Find(const int& windowWidth, const int& windowHeight) {
     window = newwin(height, width, coordinateY, coordinateX);
 }
 
-void Find::clear() const {
+void Rename::clear() const {
     std::string clr;
 
     clr.resize(width, ' ');
@@ -24,16 +24,16 @@ void Find::clear() const {
     wrefresh(window);
 }
 
-void Find::print() const {
+void Rename::print() const {
     box(window, 0, 0);
     
-    std::string name = " Find file ";
+    std::string name = " Rename file ";
     mvwprintw(stdscr, coordinateY, coordinateX + 1, name.data());
 
     wrefresh(window);   
 }
 
-std::string Find::getName() {
+std::string Rename::getName() {
     keypad(stdscr, FALSE);
 
     std::string query;
