@@ -46,4 +46,5 @@ class Window {
         void leaveDir();
 
         void findFile(const std::string& name);
+        void renameFile(const std::string& newName);
 };

@@ -3,6 +3,13 @@
 
 #include "lib/screen.h"
 
+void clearMain(Window* win) {
+    win->writeBox();
+    win->printName();
+    win->printFiles(); 
+    win->refreshWindow();
+}
+
 Screen::Screen() {
     initscr();
 
@@ -23,6 +30,7 @@ Screen::Screen() {
     rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight);
     
     find = new Find(mainWindowWidth, mainWindowHeight);
+    rename = new Rename(mainWindowWidth, mainWindowHeight);
     
     refresh();
 
@@ -49,20 +57,16 @@ void Screen::listener() {
     int t = getch();
 
     std::string key = keyname(t);
-    // std::cout<< keyname(t) << std::endl;
-    // exit(-1);
 
     if (key == "q") {
         Screen::~Screen();
         exit(0);
     }
     
-    if(key == "^F") {
+    if (key == "^F") {
         find->print();
         
         std::string query = find->getName();
-        
-        std::cout<<query;
 
         if(currentWindow) {
             leftWindow->findFile(query);
@@ -70,17 +74,27 @@ void Screen::listener() {
             rightWindow->findFile(query);
         }
 
-        leftWindow->writeBox();
-        leftWindow->printName();
-        leftWindow->printFiles();
-        leftWindow->refreshWindow();
-
-        rightWindow->writeBox();
-        rightWindow->printName();
-        rightWindow->printFiles();
-        rightWindow->refreshWindow();
+        clearMain(leftWindow);
+        clearMain(rightWindow);
     }
     
+    if (key == "^R") {
+        rename->print();
+
+        std::string query = rename->getName();
+
+        if(!query.empty()) {
+            if(currentWindow) {
+                leftWindow->renameFile(query);
+            } else {
+                rightWindow->renameFile(query);
+            }
+        }
+
+        clearMain(leftWindow);
+        clearMain(rightWindow);
+    } 
+
     if (t == 9) {
         currentWindow = !currentWindow;
         leftWindow->isFocused = !leftWindow->isFocused;

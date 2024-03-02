@@ -183,3 +183,15 @@ void Window::findFile(const std::string& name) {
         }
     }
 }
+
+void Window::renameFile(const std::string& newName) {
+    try {
+        std::filesystem::rename(path + "/" + dir[cursorPosition].name, 
+                                path + "/" + newName);\
+
+        dir[cursorPosition].path = path + "/" + newName;
+        dir[cursorPosition].name = newName;    
+    } catch (std::filesystem::filesystem_error& e) {
+        return;
+    }   
+}

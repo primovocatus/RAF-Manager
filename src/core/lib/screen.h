@@ -2,6 +2,7 @@
 
 #include "window.h"
 #include "find.h"
+#include "rename.h"
 
 class Screen {
     private:
@@ -17,6 +18,7 @@ class Screen {
         Window* rightWindow;
 
         Find* find;
+        Rename* rename;
 
     public:
         Screen();
