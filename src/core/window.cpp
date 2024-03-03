@@ -4,12 +4,14 @@ Window::Window() {
     
 }
 
-Window::Window(const int& y, const int& x, const int& width, const int& height) {
+Window::Window(const int& y, const int& x, const int& width, const int& height, const std::string homeDir) {
     coordinateY = y;
     coordinateX = x;
 
     Window::width = width;
     Window::height = height;
+
+    path = homeDir;
 
     getFiles(path, dir);
 
@@ -17,6 +19,10 @@ Window::Window(const int& y, const int& x, const int& width, const int& height) 
     topFile = 0, bottomFile = std::min(filesCount, height - 2);
 
     window = newwin(height, width, y, x);
+
+    init_pair(1, 5, 0);
+
+    wattron(window, COLOR_PAIR(1));
 }
 
 void Window::clearWindow() const {
@@ -126,8 +132,12 @@ void Window::moveCursor(const int direction) {
 
 void Window::changeDir() {
     if(dir[cursorPosition].isDirectory) {
+        if(dir[cursorPosition].name == "..") {
+            leaveDir();
+            return;
+        }
+
         try {
-            stack.push_back(path);
             path = dir[cursorPosition].path;
 
             getFiles(path, dir);
@@ -142,30 +152,25 @@ void Window::changeDir() {
             printName();
             printFiles();
         } catch (std::filesystem::filesystem_error& e) {
-            path = stack.back();
-            stack.pop_back();
             return;
         }
     }
 }
 
 void Window::leaveDir() {
-    if(!stack.empty()) {
-        cursorPosition = 0;
+    cursorPosition = 0;
 
-        path = stack.back();
-        stack.pop_back();
+    path = std::filesystem::path(path).parent_path();
 
-        getFiles(path, dir);
-        filesCount = (int)dir.size();
-        topFile = 0, bottomFile = std::min(filesCount, height - 2);
+    getFiles(path, dir);
+    filesCount = (int)dir.size();
+    topFile = 0, bottomFile = std::min(filesCount, height - 2);
         
-        clearWindow();
+    clearWindow();
 
-        writeBox();
-        printName();
-        printFiles();
-    }
+    writeBox();
+    printName();
+    printFiles();
 }
 
 void Window::findFile(const std::string& name) {

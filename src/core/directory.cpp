@@ -10,6 +10,15 @@ bool sortName(const file& a, const file& b) {
 void getFiles(const std::string& path, std::vector<file>& dir) {
     dir.clear();
 
+    if(std::filesystem::path(path).parent_path() != path) {
+        file upDir;
+
+        upDir.isDirectory = 1;
+        upDir.name = "..";
+
+        dir.push_back(upDir);
+    }
+
     for (const auto& files: std::filesystem::directory_iterator(path)) {
         file currentFile;
             

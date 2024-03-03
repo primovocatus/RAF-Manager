@@ -3,6 +3,9 @@
 
 #include "lib/screen.h"
 
+struct passwd *pw = getpwuid(getuid());
+const char *homeDir = pw->pw_dir;
+
 void clearMain(Window* win) {
     win->writeBox();
     win->printName();
@@ -12,6 +15,7 @@ void clearMain(Window* win) {
 
 Screen::Screen() {
     initscr();
+    start_color();
 
     noecho();
     curs_set(0);
@@ -26,9 +30,9 @@ Screen::Screen() {
     leftWindowWidth = (mainWindowWidth + 1) / 2;
     rightWindowWidth = mainWindowWidth / 2;
 
-    leftWindow = new Window(0, 0, leftWindowWidth, mainWindowHeight);
-    rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight);
-    
+    leftWindow = new Window(0, 0, leftWindowWidth, mainWindowHeight, homeDir);
+    rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight, homeDir);
+
     find = new Find(mainWindowWidth, mainWindowHeight);
     rename = new Rename(mainWindowWidth, mainWindowHeight);
     
@@ -55,8 +59,47 @@ Screen::~Screen() {
 void Screen::listener() {
     move(mainWindowHeight, 0);
     int t = getch();
-
     std::string key = keyname(t);
+
+    switch (t) {
+        //tab key
+        case 9:
+            currentWindow = !currentWindow;
+            leftWindow->isFocused = !leftWindow->isFocused;
+            rightWindow->isFocused = !rightWindow->isFocused;
+
+            leftWindow->printName();
+            leftWindow->printFiles();
+
+            rightWindow->printName();
+            rightWindow->printFiles();
+            break;
+
+        //enter key
+        case 10:
+            if(currentWindow) {
+                leftWindow->changeDir();
+            } else {
+                rightWindow->changeDir();
+            }
+            break;
+
+        case KEY_DOWN:
+            if(currentWindow) {
+                leftWindow->moveCursor(1);
+            } else {
+                rightWindow->moveCursor(1);
+            }
+            break;
+
+        case KEY_UP:
+            if(currentWindow) {
+                leftWindow->moveCursor(-1);
+            } else {
+                rightWindow->moveCursor(-1);
+            }
+            break;
+    }
 
     if (key == "q") {
         Screen::~Screen();
@@ -89,50 +132,6 @@ void Screen::listener() {
             } else {
                 rightWindow->renameFile(query);
             }
-        }
-
-        clearMain(leftWindow);
-        clearMain(rightWindow);
-    } 
-
-    if (t == 9) {
-        currentWindow = !currentWindow;
-        leftWindow->isFocused = !leftWindow->isFocused;
-        rightWindow->isFocused = !rightWindow->isFocused;
-
-        leftWindow->printName();
-        leftWindow->printFiles();
-
-        rightWindow->printName();
-        rightWindow->printFiles();
-    }
-
-    if (key == "s" || key == "KEY_DOWN") {
-        if(currentWindow) {
-            leftWindow->moveCursor(1);
-        } else {
-            rightWindow->moveCursor(1);
-        }
-    } 
-    if (key == "w" || key == "KEY_UP") {
-        if(currentWindow) {
-            leftWindow->moveCursor(-1);
-        } else {
-            rightWindow->moveCursor(-1);
-        }
-    }
-    if(key == "d" || key == "KEY_RIGHT") {
-        if(currentWindow) {
-            leftWindow->changeDir();
-        } else {
-            rightWindow->changeDir();
-        }
-    }
-    if (key == "a" || key == "KEY_LEFT") {
-        if(currentWindow) {
-            leftWindow->leaveDir();
-        } else {
-            rightWindow->leaveDir();
         }
     }
 }
