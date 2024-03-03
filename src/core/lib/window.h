@@ -1,5 +1,9 @@
 #include <ncurses.h>
 
+#include <sys/types.h>
+#include <pwd.h>
+#include <unistd.h>
+
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -19,7 +23,6 @@ class Window {
         int filesCount = 0;
 
         std::string path = "/";
-        std::vector<std::string> stack;
         std::vector<file> dir;
 
         WINDOW* window;
@@ -29,7 +32,7 @@ class Window {
     public:
         Window();
         Window(const int& y, const int& x, const int& width, 
-                const int& height);
+                const int& height, const std::string homeDir);
 
         bool isFocused = 0;
 

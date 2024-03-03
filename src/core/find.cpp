@@ -34,10 +34,8 @@ void Find::print() const {
 }
 
 std::string Find::getName() {
-    keypad(stdscr, FALSE);
-
     std::string query;
-    
+
     while(1) {
         std::string currentQuery = query;
         
@@ -58,16 +56,10 @@ std::string Find::getName() {
         int t = getch();
 
         if (t == 10) {
-            keypad(stdscr, TRUE);
             return query;
-        }
-
-        if (t == 27) {
-            keypad(stdscr, TRUE);
+        } else if (t == 27) {
             return "";
-        }
-        
-        if (t == 127) {
+        } else if (t == KEY_BACKSPACE) {
             if(!query.empty()) {
                 query.erase(query.size() - 1);
             }
