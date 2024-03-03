@@ -133,5 +133,8 @@ void Screen::listener() {
                 rightWindow->renameFile(query);
             }
         }
+
+        clearMain(leftWindow);
+        clearMain(rightWindow);
     }
 }
