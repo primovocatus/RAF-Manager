@@ -1,7 +1,6 @@
 #include <ncurses.h>
 
 #include "window.h"
-#include "find.h"
 #include "rename.h"
 
 class Screen {
@@ -17,7 +16,6 @@ class Screen {
         Window* leftWindow;
         Window* rightWindow;
 
-        Find* find;
         Rename* rename;
 
     public:

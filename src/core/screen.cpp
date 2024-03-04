@@ -7,8 +7,6 @@ struct passwd *pw = getpwuid(getuid());
 const char *homeDir = pw->pw_dir;
 
 void clearMain(Window* win) {
-    win->writeBox();
-    win->printName();
     win->printFiles(); 
     win->refreshWindow();
 }
@@ -33,7 +31,6 @@ Screen::Screen() {
     leftWindow = new Window(0, 0, leftWindowWidth, mainWindowHeight, homeDir);
     rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight, homeDir);
 
-    find = new Find(mainWindowWidth, mainWindowHeight);
     rename = new Rename(mainWindowWidth, mainWindowHeight);
     
     refresh();
@@ -41,15 +38,8 @@ Screen::Screen() {
     currentWindow = 1;
     leftWindow->isFocused = 1;
 
-    leftWindow->writeBox();
-    leftWindow->printName();
-    leftWindow->printFiles();
-    leftWindow->refreshWindow();
-
-    rightWindow->writeBox();
-    rightWindow->printName();
-    rightWindow->printFiles();
-    rightWindow->refreshWindow();
+    clearMain(leftWindow);
+    clearMain(rightWindow);
 }
 
 Screen::~Screen() {
@@ -68,10 +58,8 @@ void Screen::listener() {
             leftWindow->isFocused = !leftWindow->isFocused;
             rightWindow->isFocused = !rightWindow->isFocused;
 
-            leftWindow->printName();
             leftWindow->printFiles();
 
-            rightWindow->printName();
             rightWindow->printFiles();
             break;
 
@@ -106,19 +94,12 @@ void Screen::listener() {
         exit(0);
     }
     
-    if (key == "^F") {
-        find->print();
-        
-        std::string query = find->getName();
-
+    if (key == "^F") { 
         if(currentWindow) {
-            leftWindow->findFile(query);
+            leftWindow->findFile();
         } else {
-            rightWindow->findFile(query);
+            rightWindow->findFile();
         }
-
-        clearMain(leftWindow);
-        clearMain(rightWindow);
     }
     
     if (key == "^R") {

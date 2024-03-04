@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include "directory.h"
+#include "find.h"
 
 class Window {
     private:
@@ -25,6 +26,8 @@ class Window {
         std::string path = "/";
         std::vector<file> dir;
 
+        Find* find;
+
         WINDOW* window;
 
         friend screen;
@@ -33,6 +36,7 @@ class Window {
         Window();
         Window(const int& y, const int& x, const int& width, 
                 const int& height, const std::string homeDir);
+
 
         bool isFocused = 0;
 
@@ -48,6 +52,8 @@ class Window {
         void changeDir();
         void leaveDir();
 
-        void findFile(const std::string& name);
+        void findFile();
+        bool findFiles(std::string& name);
+
         void renameFile(const std::string& newName);
 };
