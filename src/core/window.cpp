@@ -16,7 +16,7 @@ Window::Window(const int& y, const int& x, const int& width, const int& height, 
     getFiles(path, dir);
 
     filesCount = (int)dir.size();
-    topFile = 0, bottomFile = std::min(filesCount, height - 2);
+    topFile = 0, bottomFile = std::min(filesCount, height - 4);
 
     window = newwin(height, width, y, x);
 
