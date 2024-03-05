@@ -10,13 +10,8 @@ class Find {
         int width;
         int height;
 
-        WINDOW* window;
-
     public:
-        Find(const int& windowSize, const int& windowHeight);
+        Find(const int& windowSize, const int& coordinateY);
 
-        void clear() const;
-        void print() const;
-
-        std::string getName();
+        void clear(WINDOW* win) const;
 };
