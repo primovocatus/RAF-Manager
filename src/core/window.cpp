@@ -171,7 +171,7 @@ void Window::leaveDir() {
 
     getFiles(path, dir);
     filesCount = (int)dir.size();
-    topFile = 0, bottomFile = std::min(filesCount, height - 2);
+    topFile = 0, bottomFile = std::min(filesCount, height - 4);
         
     clearWindow();
 
