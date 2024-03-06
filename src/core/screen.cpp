@@ -46,7 +46,7 @@ Screen::~Screen() {
     endwin();
 }
 
-void Screen::listener() {
+bool Screen::listener() {
     move(mainWindowHeight, 0);
     int t = getch();
     std::string key = keyname(t);
@@ -87,6 +87,21 @@ void Screen::listener() {
                 rightWindow->moveCursor(-1);
             }
             break;
+        case KEY_HOME:
+            if(currentWindow) {
+                leftWindow->toHome();
+            } else {
+                rightWindow->toHome();
+            }
+            break;
+        
+        case KEY_END:
+            if(currentWindow) {
+                leftWindow->toEnd();
+            } else {
+                rightWindow->toEnd();
+            }
+            break;
     }
 
     if (key == "q") {
@@ -118,4 +133,9 @@ void Screen::listener() {
         clearMain(leftWindow);
         clearMain(rightWindow);
     }
+
+    if (key == "KEY_RESIZE") {
+        return 0;
+    }
+    return 1;
 }

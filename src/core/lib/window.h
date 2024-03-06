@@ -42,12 +42,13 @@ class Window {
 
         void clearWindow() const;
         void refreshWindow() const;
+        void setCursor(const int position);
 
         void writeBox() const;
         void printName() const;
         void printFiles();
 
-        void moveCursor(const int);
+        void moveCursor(const int position);
 
         void changeDir();
         void leaveDir();
@@ -56,4 +57,7 @@ class Window {
         bool findFiles(std::string& name);
 
         void renameFile(const std::string& newName);
+
+        void toHome();
+        void toEnd();
 };

@@ -1,10 +1,11 @@
 #include "core/lib/screen.h"
 
 int main() {
-    Screen mainScreen;
 
     while(1) {
-        mainScreen.listener();
+        Screen mainScreen;
+        while(mainScreen.listener());
+        mainScreen.~Screen();
     }
 
     getch();
