@@ -55,6 +55,9 @@ class Window {
 
         void findFile();
         bool findFiles(std::string& name);
+        
+        file getFile();
+        void removeFile(const file& file);
 
         void renameFile(const std::string& newName);
 

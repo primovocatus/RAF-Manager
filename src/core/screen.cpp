@@ -32,7 +32,8 @@ Screen::Screen() {
     rightWindow = new Window(0, leftWindowWidth, rightWindowWidth, mainWindowHeight, homeDir);
 
     rename = new Rename(mainWindowWidth, mainWindowHeight);
-    
+    del = new Delete(mainWindowWidth, mainWindowHeight);
+
     refresh();
 
     currentWindow = 1;
@@ -101,6 +102,27 @@ bool Screen::listener() {
             } else {
                 rightWindow->toEnd();
             }
+            break;
+
+        case KEY_DC:
+            file currentFile;
+
+            if(currentWindow) {
+                currentFile = leftWindow->getFile();
+            } else {
+                currentFile = rightWindow->getFile();
+            }
+
+            if(del->print(currentFile.isDirectory, currentFile.name, currentFile.path)) {
+                if(currentWindow) {
+                    leftWindow->removeFile(currentFile);
+                } else {
+                    rightWindow->removeFile(currentFile);
+                }
+            }
+
+            clearMain(leftWindow);
+            clearMain(rightWindow);
             break;
     }
 

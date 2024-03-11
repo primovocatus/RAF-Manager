@@ -153,11 +153,6 @@ void Window::moveCursor(const int direction) {
 
 void Window::changeDir() {
     if(dir[cursorPosition].isDirectory) {
-        if(dir[cursorPosition].name == "..") {
-            leaveDir();
-            return;
-        }
-
         try {
             path = dir[cursorPosition].path;
 
@@ -266,6 +261,20 @@ void Window::renameFile(const std::string& newName) {
     } catch (std::filesystem::filesystem_error& e) {
         return;
     }   
+}
+
+file Window::getFile() {
+    return dir[cursorPosition];
+}
+
+void Window::removeFile(const file& file) {
+    for (int i = 0; i < filesCount; ++i) {
+        if (dir[i].path == file.path && 
+            dir[i].isDirectory == file.isDirectory) {
+            dir.erase(dir.begin() + i);
+            cursorPosition--;
+        }
+    }
 }
 
 void Window::toHome() {

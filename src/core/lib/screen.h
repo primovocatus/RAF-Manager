@@ -2,6 +2,7 @@
 
 #include "window.h"
 #include "rename.h"
+#include "delete.h"
 
 class Screen {
     private:
@@ -16,6 +17,7 @@ class Screen {
         Window* leftWindow;
         Window* rightWindow;
 
+        Delete* del;
         Rename* rename;
 
     public:
