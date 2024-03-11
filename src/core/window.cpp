@@ -42,6 +42,18 @@ void Window::refreshWindow() const {
     wrefresh(window);
 }
 
+void Window::setCursor(const int position) {
+    cursorPosition = position;
+    topFile = position;
+    bottomFile = filesCount;
+
+    if(filesCount < topFile + height - 4) {
+        topFile = std::max(0, filesCount - height + 4);
+    } else {
+        bottomFile = topFile + height - 4;
+    }
+}
+
 void Window::writeBox() const {
     box(window, 0, 0);
 
@@ -171,7 +183,7 @@ void Window::leaveDir() {
 
     getFiles(path, dir);
     filesCount = (int)dir.size();
-    topFile = 0, bottomFile = std::min(filesCount, height - 2);
+    topFile = 0, bottomFile = std::min(filesCount, height - 4);
         
     clearWindow();
 
@@ -183,16 +195,7 @@ bool Window::findFiles(std::string& name) {
 
     for (int i = 0; i < filesCount; ++i) {
         if(dir[i].name.substr(0, (int)name.size()) == name) {
-            cursorPosition = i;
-            topFile = i;
-            bottomFile = filesCount;
-
-            if(filesCount < topFile + height - 4) {
-                topFile = std::max(0, filesCount - height + 4);
-            } else {
-                bottomFile = topFile + height - 4;
-            }
-
+            setCursor(i);
             return 1;
         }
     }
@@ -263,4 +266,13 @@ void Window::renameFile(const std::string& newName) {
     } catch (std::filesystem::filesystem_error& e) {
         return;
     }   
+}
+
+void Window::toHome() {
+    setCursor(0);
+    printFiles();
+}
+void Window::toEnd() {
+    setCursor(filesCount - 1);
+    printFiles();
 }

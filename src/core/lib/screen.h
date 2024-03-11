@@ -22,5 +22,5 @@ class Screen {
         Screen();
         ~Screen();
 
-        void listener();
+        bool listener();
 };
