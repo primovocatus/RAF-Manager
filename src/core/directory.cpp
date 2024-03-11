@@ -15,6 +15,7 @@ void getFiles(const std::string& path, std::vector<file>& dir) {
 
         upDir.isDirectory = 1;
         upDir.name = "..";
+        upDir.path = std::filesystem::path(path).parent_path();
 
         dir.push_back(upDir);
     }
