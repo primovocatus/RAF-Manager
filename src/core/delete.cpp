@@ -76,7 +76,7 @@ bool Delete::print(const bool& isDirectory, const std::string& fileName,
     mvwprintw(stdscr, coordinateY + 2, coordinateX + positionX, deleteName.data());
 
     for (int i = 1; i < width - 1; ++i) {
-        mvwaddch(stdscr, coordinateY + 3, coordinateX + 1, ACS_HLINE);
+        mvwaddch(stdscr, coordinateY + 3, coordinateX + i, ACS_HLINE);
     }
 
     int buttonX = coordinateX + (width - 14) / 2;
