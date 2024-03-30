@@ -272,7 +272,9 @@ void Window::removeFile(const file& file) {
         if (dir[i].path == file.path && 
             dir[i].isDirectory == file.isDirectory) {
             dir.erase(dir.begin() + i);
-            cursorPosition--;
+
+            filesCount--;
+            setCursor(std::min(cursorPosition, filesCount - 1));
         }
     }
 }

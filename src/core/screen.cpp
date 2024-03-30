@@ -121,7 +121,10 @@ bool Screen::listener() {
                 }
             }
 
+            leftWindow->clearWindow();
             clearMain(leftWindow);
+
+            rightWindow->clearWindow();
             clearMain(rightWindow);
             break;
     }
